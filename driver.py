@@ -14,7 +14,7 @@ output.writerow(['']+[str(i) for i in PROBLEM_SIZES])
 for num_threads in NUM_THREADS:
     row = [str(num_threads)]
     for problem_size in PROBLEM_SIZES:
-        result = subprocess.run(['mpirun', '-np', str(num_threads), 'mergeSortMPI', str(problem_size)], stdout=subprocess.PIPE)
+        result = subprocess.run(['mpirun', '-np', str(num_threads), '--map-by', 'node', 'mergeSortMPI', str(problem_size)], stdout=subprocess.PIPE)
         row += [result.stdout.decode('utf-8').strip()]
     output.writerow(row)
 
