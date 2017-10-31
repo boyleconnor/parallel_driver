@@ -285,15 +285,15 @@ int main(int argc, char** argv) {
 		zeroStartTime = MPI_Wtime();
 		globalArray = mergeSort(height, id, localArray, localArraySize, MPI_COMM_WORLD, globalArray);
 		zeroTotalTime = MPI_Wtime() - zeroStartTime;
-		printf("Process #%d of %d on %s took %f seconds \n", 
-			id, numProcs, myHostName, zeroTotalTime);
+		// printf("Process #%d of %d on %s took %f seconds \n", 
+		//	id, numProcs, myHostName, zeroTotalTime);
 	}
 	else {
 		processStartTime = MPI_Wtime();
 	        mergeSort(height, id, localArray, localArraySize, MPI_COMM_WORLD, NULL);
 		processTotalTime = MPI_Wtime() - processStartTime;
-		printf("Process #%d of %d on %s took %f seconds \n", 
-			id, numProcs, myHostName, processTotalTime);
+		// printf("Process #%d of %d on %s took %f seconds \n", 
+		//	id, numProcs, myHostName, processTotalTime);
 	}
     //End timing
     localTime = MPI_Wtime() - startTime;
@@ -302,7 +302,8 @@ int main(int argc, char** argv) {
 
     if (id == 0) {
 		//printList(0, "FINAL SORTED ARRAY", globalArray, globalArraySize);  // Line C
-		printf("Sorting %d integers took %f seconds \n", globalArraySize,totalTime);
+		// printf("Sorting %d integers took %f seconds \n", globalArraySize,totalTime);
+		printf("%f\n", totalTime);
 		free(globalArray);
 	}
 
