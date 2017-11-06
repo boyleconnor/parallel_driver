@@ -1,21 +1,30 @@
 import subprocess
 import csv
+import os
 
 
 PROBLEM_SIZES = (102400000, 204800000, 409600000)
 NUM_THREADS = (2, 4, 8, 16)
+CMDS = {'mergeSortMPI': 'mergeSortMPI', 'oddEvenSort': 'mpi_odd_even'}
 
 
+directory = os.path.basename(os.getcwd())
 output_file = open('output.csv', 'w')
 output = csv.writer(output_file)
 output.writerow(['']+[str(i) for i in PROBLEM_SIZES])
 
 
+def run_job(num_threads, problem_size):
+    result, error = subprocess.Popen(['mpirun', '-np', str(num_threads), '--map-by', 'node', CMDS[directory], str(problem_size)], stdout=subprocess.PIPE).communicate()
+    assert not error
+    return result.decode('utf-8').strip()
+
+
 for num_threads in NUM_THREADS:
     row = [str(num_threads)]
     for problem_size in PROBLEM_SIZES:
-        result, error = subprocess.Popen(['mpirun', '-np', str(num_threads), '--map-by', 'node', 'mergeSortMPI', str(problem_size)], stdout=subprocess.PIPE).communicate()
-        row += [result.decode('utf-8').strip()]
+        result = run_job(num_threads, problem_size)
+        row += [result]
         print("Finished problem size: %s threads: %s" % (problem_size, num_threads))
     output.writerow(row)
 
