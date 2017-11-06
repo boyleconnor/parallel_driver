@@ -15,7 +15,10 @@ output.writerow(['']+[str(i) for i in PROBLEM_SIZES])
 
 
 def run_job(num_threads, problem_size):
-    result, error = subprocess.Popen(['mpirun', '-np', str(num_threads), '--map-by', 'node', CMDS[directory], str(problem_size)], stdout=subprocess.PIPE).communicate()
+    cmd = ['mpirun', '-np', str(num_threads), '--map-by', 'node', CMDS[directory], 'g', str(problem_size)]
+    if directory != 'oddEvenSort':
+        cmd.pop(-2)
+    result, error = subprocess.Popen(cmd, stdout=subprocess.PIPE).communicate()
     assert not error
     return result.decode('utf-8').strip()
 
